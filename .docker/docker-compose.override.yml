@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  database:
+    build:
+      context: database/.image
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3306:3306"
+    volumes:
+      - database:/var/lib/mysql
+
+  backend:
+    build:
+      context: backend/.image
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../backend:/srv/dockerapp/
+
+  frontend:
+    build:
+      context: frontend/.image
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8081:4200"
+    volumes:
+      - ../frontend:/srv/dockerapp/

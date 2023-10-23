@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  database:
+    image: "${DOCKER_REGISTRY_URL}/${DOCKERAPP_PROJECT}/database${DOCKERAPP_TAG}"
+    networks:
+      default:
+        aliases:
+          - "${DOCKERAPP_PROJECT}-database"
+    environment:
+      - DOCKERAPP_ENV
+
+      # enable group to write the mysql files
+      - UMASK=0660
+      - UMASK_DIR=0770
+
+      - MYSQL_DATABASE=${DOCKERAPP_DATABASE_SCHEME}
+      - MYSQL_USER=${DOCKERAPP_DATABASE_USER}
+      - MYSQL_PASSWORD=${DOCKERAPP_DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DOCKERAPP_DATABASE_ROOT}
+
+
+  backend:
+    image: "${DOCKER_REGISTRY_URL}/${DOCKERAPP_PROJECT}/backend${DOCKERAPP_TAG}"
+    networks:
+      default:
+        aliases:
+          - "${DOCKERAPP_PROJECT}-backend"
+    environment:
+      - DOCKERAPP_ENV
+      - DOCKERAPP_PROJECT
+
+      - TYPEORM_HOST=${DOCKERAPP_PROJECT}-database
+      - TYPEORM_USERNAME=${DOCKERAPP_DATABASE_USER}
+      - TYPEORM_PASSWORD=${DOCKERAPP_DATABASE_PASSWORD}
+      - TYPEORM_DATABASE=${DOCKERAPP_DATABASE_SCHEME}
+      - TYPEORM_DATABASE_PORT=${DOCKERAPP_DATABASE_PORT}
+
+
+  frontend:
+    image: "${DOCKER_REGISTRY_URL}/${DOCKERAPP_PROJECT}/frontend${DOCKERAPP_TAG}"
+    networks:
+      default:
+        aliases:
+          - "${DOCKERAPP_PROJECT}-frontend"
+    environment:
+      - DOCKERAPP_ENV
+      - DOCKERAPP_PROJECT
+
+volumes:
+  database:
+    driver: "local"
+
+networks:
+  default:
+    name: ${DOCKERAPP_PROJECT}
+    driver: bridge
