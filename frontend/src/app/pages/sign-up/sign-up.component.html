@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-content>
+
+    <form [formGroup]="form" class="signUp__form" (submit)="submitSignUp($event)">
+
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+        <mat-error>{{ form.get('name') | errorMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username">
+        <mat-error>{{ form.get('name') | errorMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" #passwordInput type="password">
+        <button
+          matSuffix
+          mat-icon-button
+          (click)="passwordInput.type === 'password' ? passwordInput.type = 'text' : passwordInput.type = 'password'"
+        >
+          <mat-icon *ngIf="passwordInput.type === 'password'">visibility_on</mat-icon>
+          <mat-icon *ngIf="passwordInput.type === 'text'">visibility_off</mat-icon>
+        </button>
+        <mat-error>{{ form.get('name') | errorMessage }}</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" [disabled]="form.invalid" color="accent">
+        Sign up
+      </button>
+
+      <a routerLink="/login">
+        I already have an account
+      </a>
+    </form>
+
+  </mat-card-content>
+</mat-card>
+

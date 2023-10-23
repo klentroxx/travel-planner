@@ -1,0 +1,11 @@
+:host {
+  align-self: center;
+  justify-self: center;
+}
+
+.signIn {
+  &__form {
+    display: flex;
+    flex-flow: column;
+  }
+}
